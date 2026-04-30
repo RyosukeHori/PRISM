@@ -2,7 +2,7 @@
 
 **PRISM** (*Pressure and Inertial Sensing for Human Motion and Interaction*) is a multimodal motion-capture dataset combining **SMPL body**, **8-IMU body sensors**, **insole pressure**, **SLAM head trajectory + environment point cloud**, and **scene objects**. It covers everyday locomotion, balance, sports, and stepping/sitting interactions in light and dark conditions.
 
-PRISM was collected and released as part of **GRIP: Ground Reaction Inertial Poser** (CVPR 2026), which fuses 4 wrist/foot IMUs with insole pressure (vertical GRF, CoP, contact) to reconstruct physically plausible full-body motion via a two-stage *kinematics → physics-controlled dynamics* architecture.
+Released with **GRIP: Ground Reaction Inertial Poser** (CVPR 2026), which fuses 4 wrist/foot IMUs with insole pressure (GRF, CoP, contact) to reconstruct physically plausible full-body motion.
 
 <p align="center">
   <a href="https://ryosukehori.github.io/grip-project/">
@@ -14,6 +14,9 @@ PRISM was collected and released as part of **GRIP: Ground Reaction Inertial Pos
   <a href="https://ryosukehori.github.io/grip-project/">
     <img alt="CVPR 2026" src="https://img.shields.io/badge/CVPR-2026-1f4e79?style=for-the-badge">
   </a>
+  <a href="https://docs.google.com/forms/d/e/1FAIpQLSd32bDGpJy-a_PylvQmEZf_zVgwhpHU-O1Tfdv2pHLO3YOl0w/viewform">
+    <img alt="Request Access" src="https://img.shields.io/badge/Dataset-Request_Access-228b22?style=for-the-badge&logo=googleforms&logoColor=white">
+  </a>
 </p>
 
 <p align="center">
@@ -22,7 +25,19 @@ PRISM was collected and released as part of **GRIP: Ground Reaction Inertial Pos
 
 ---
 
-## At a glance
+## Download
+
+Dataset access is gated by a short [**Google Form**](https://docs.google.com/forms/d/e/1FAIpQLSd32bDGpJy-a_PylvQmEZf_zVgwhpHU-O1Tfdv2pHLO3YOl0w/viewform). Submit the form and the download link will appear on the response screen.
+
+After downloading, unzip under `data/`:
+
+```bash
+unzip PRISM.zip -d data/
+```
+
+---
+
+## At a Glance
 
 | | |
 |---|---|
@@ -32,9 +47,8 @@ PRISM was collected and released as part of **GRIP: Ground Reaction Inertial Pos
 | Total duration | ≈ 3.5 hours |
 | Subjects | 6 (`subj001` – `subj006`) |
 | Takes | 149 train / 127 test |
-| | |
 
-**Trials** include `Walking`, `Jogging`, `Switch Direction`, `Sidestep`, `Lunge Walk`, `Forward Jump`, `Squatting`, `Stretching`, `Balancing`, `Object Carrying`, `Stepping Boxes/Stair`, `Sitting Boxes`, `Soccer`, `Tennis`, `Baseball`, `Golf`. The `Dark` suffix denotes low-light recordings; `Stepping*` / `Sitting*` trials include accompanying object meshes.
+**Trials**: `Walking`, `Jogging`, `Switch Direction`, `Sidestep`, `Lunge Walk`, `Forward Jump`, `Squatting`, `Stretching`, `Balancing`, `Object Carrying`, `Stepping Boxes/Stair`, `Sitting Boxes`, `Soccer`, `Tennis`, `Baseball`, `Golf`. `Dark` = low-light recording. `Stepping*` / `Sitting*` include scene-object meshes.
 
 ---
 
@@ -42,25 +56,25 @@ PRISM was collected and released as part of **GRIP: Ground Reaction Inertial Pos
 
 ```
 PRISM/
-├── data/PRISM/<subj>/<take>.pkl   # one continuous take per file
+├── data/PRISM/<subj>/<take>.pkl   # one full-length take per file
 ├── json/
 │   ├── dataset_split.json         # sequence-level train / test split
 │   └── dataset_statistics.json    # per-sequence chunk windows + flags
-├── image/PRISM.png                # teaser
+├── image/PRISM.png
 ├── data_viewer.py                 # aitviewer-based visualization
-├── requirements.txt               # Python dependencies (NumPy 2.1.x)
+├── requirements.txt
 └── README.md
 ```
 
-**Files are stored as full-length takes**, not pre-chunked — `data/PRISM/<subj>/<take>.pkl` contains the entire recording. Train / test partitioning happens at the chunk level: the JSON files under `json/` describe how each take is sliced into 1000-frame (10 s) chunks (`seq000` → frames 0–1000, `seq001` → 1000–2000, …) and assign each chunk to either split. Load the take, then slice with `start_frame:end_frame` from `json/dataset_statistics.json` (see [Quick start](#quick-start)).
+Each `.pkl` holds a full-length recording. The JSON files in `json/` define how each take is sliced into 1000-frame (10 s) chunks (`seq000` = frames 0–1000, `seq001` = 1000–2000, …) and assigns each chunk to train or test.
 
 ---
 
-## File format
+## File Format
 
 Each `.pkl` is a Python `dict`. `F` is the take's frame count (e.g. 13,160).
 
-### `info` — metadata
+### `info` — Metadata
 
 ```
 subj_info : {subj_id, gender, age, height, weight, shoe_length, arm_length}
@@ -68,9 +82,9 @@ data_info : {take_id, trial_name, insole_size, fps,
              synth_imu_frames: {L_Wrist: [...], R_Wrist: [...]}}
 ```
 
-`synth_imu_frames` lists frame indices where the wrist IMU is **synthesized from SMPL** rather than measured by the Apple Watch. During recording the Watch occasionally dropped or returned corrupted samples; those frames are reconstructed from SMPL kinematics and their indices are preserved here so you can mask, weight, or exclude them as needed. Test-split chunks are guaranteed not to contain any synthesized wrist-IMU frames (see [Train / test split](#train--test-split)).
+`synth_imu_frames` lists frame indices where the wrist IMU was reconstructed from SMPL because the Apple Watch dropped or returned corrupted samples. Test chunks are guaranteed to contain none.
 
-### `smpl_params` — SMPL body
+### `smpl_params` — SMPL Body
 
 | field | shape | notes |
 |---|---|---|
@@ -80,7 +94,7 @@ data_info : {take_id, trial_name, insole_size, fps,
 | `gender` | `'male'` / `'female'` | |
 | `root_offset` | `[3]` float64 | |
 
-### `imu` — measured / synthesized IMU (8 parts)
+### `imu` — Measured / Synthesized IMU (8 Parts)
 
 Parts: `L_Foot`, `R_Foot`, `L_Wrist`, `R_Wrist`, `Head`, `Pelvis`, `L_Knee`, `R_Knee`. Field names encode `<quantity>_<frame>_<processing>`.
 
@@ -89,17 +103,17 @@ Parts: `L_Foot`, `R_Foot`, `L_Wrist`, `R_Wrist`, `Head`, `Pelvis`, `L_Knee`, `R_
 | `acc_world_raw`  | `[F, 3]` | world frame, unfiltered |
 | `acc_world_filt` | `[F, 3]` | world frame, low-pass filtered |
 | `ori_world`      | `[F, 3, 3]` | world-frame rotation matrix |
-| `acc_local_raw`  | `[F, 3]` | feet only — insole IMU, sensor frame, raw |
-| `gyr_local_raw`  | `[F, 3]` | feet only — insole IMU, sensor frame, raw |
+| `acc_local_raw`  | `[F, 3]` | feet only — insole IMU, sensor frame |
+| `gyr_local_raw`  | `[F, 3]` | feet only — insole IMU, sensor frame |
 
-### `imu_gt` — SMPL-derived ground truth (8 parts)
+### `imu_gt` — SMPL-Derived Ground Truth (8 Parts)
 
 | field | shape |
 |---|---|
 | `pos_world`, `vel_world`, `acc_world` | `[F, 3]` |
 | `ori_world` | `[F, 3, 3]` |
 
-### `insole` — pressure / GRF
+### `insole` — Pressure / GRF
 
 Per foot (`L_Foot`, `R_Foot`):
 
@@ -120,11 +134,11 @@ Per foot (`L_Foot`, `R_Foot`):
 | `points` | `[N, 3]` | environment point cloud |
 | `head_traj` | `[F, 3]` | head trajectory (world frame) |
 
-### `objects` — optional scene meshes
+### `objects` — Optional Scene Meshes
 
-Present only for `Stepping*` / `Sitting*` trials; `None` otherwise. Each entry: `{vertices [V,3], faces [Fc,3], centroid [3], extents [3]}`.
+Present only for `Stepping*` / `Sitting*` trials, otherwise `None`. Each entry: `{vertices [V,3], faces [Fc,3], centroid [3], extents [3]}`.
 
-### Coordinate conventions
+### Coordinate Conventions
 
 - World frame is **Z-up**.
 - World translation = `smpl_params['trans'] + smpl_params['root_offset']`.
@@ -132,7 +146,7 @@ Present only for `Stepping*` / `Sitting*` trials; `None` otherwise. Each entry: 
 
 ---
 
-## Train / test split
+## Train / Test Split
 
 `json/dataset_split.json`:
 
@@ -143,7 +157,7 @@ Present only for `Stepping*` / `Sitting*` trials; `None` otherwise. Each entry: 
 }
 ```
 
-Chunk-level random split (`seed = 42`); the same take can contribute chunks to both splits. **Chunks containing any synthesized wrist-IMU frames are kept on the train side only**, so the test set is fully measured (see `has_synthetic_imu` below and `synth_imu_frames` under [`info`](#info--metadata)).
+Chunk-level random split (`seed = 42`); the same take can contribute chunks to both splits. **Chunks containing any synthesized wrist-IMU frames are kept on the train side only**, so the test set is fully measured.
 
 `json/dataset_statistics.json` contains per-sequence records:
 
@@ -152,18 +166,18 @@ Chunk-level random split (`seed = 42`); the same take can contribute chunks to b
  start_frame, end_frame, total_frames, has_synthetic_imu, file_name}
 ```
 
-Use `start_frame:end_frame` to slice the chunk out of the corresponding `.pkl`.
+Slice the corresponding `.pkl` with `start_frame:end_frame`.
 
 ---
 
-## Quick start
+## Quick Start
 
 ```bash
 conda create -n prism python=3.11 -y && conda activate prism
 pip install --no-build-isolation -r requirements.txt
 ```
 
-Tested on Python 3.11 with NumPy 1.26.x. The `.pkl` files were pickled with NumPy 1.x and load on NumPy 1.x or 2.x. `--no-build-isolation` is needed because `chumpy`'s `setup.py` imports `pip._internal` (otherwise hidden by PEP 517). See [`requirements.txt`](requirements.txt) for pinning rationale and SMPL model setup notes.
+Tested on Python 3.11 with NumPy 1.26.x. `--no-build-isolation` is required by `chumpy`'s `setup.py`.
 
 **Load a take:**
 
@@ -198,8 +212,8 @@ for seq_id in split["train"]:
 **Interactive visualization** — overlays SMPL, IMU, GRF, foot contact, head trajectory, point cloud, and object mesh:
 
 ```bash
-python data_viewer.py                              # random order, infinite loop
-python data_viewer.py -s subj001                   # all takes from subj001 (one pass)
-python data_viewer.py -s subj001 -t take002        # one specific take
-python data_viewer.py --data-dir other/PRISM       # use a different data root
+python data_viewer.py                          # random order, infinite loop
+python data_viewer.py -s subj001               # all takes from subj001 (one pass)
+python data_viewer.py -s subj001 -t take002    # one specific take
+python data_viewer.py --data-dir other/PRISM   # use a different data root
 ```
