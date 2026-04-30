@@ -1,0 +1,9 @@
+# Tested: Python 3.11 + NumPy 1.26.x
+# Install: pip install --no-build-isolation -r requirements.txt
+# (--no-build-isolation is required by chumpy's setup.py.)
+
+numpy>=1.23,<2.0
+scipy>=1.10
+
+aitviewer @ git+https://github.com/eth-ait/aitviewer.git@c70b00872f5757a1d7762c642693b730fe050da8
+chumpy   @ git+https://github.com/mattloper/chumpy.git@580566eafc9ac68b2614b64d6f7aaa84eebb70da
