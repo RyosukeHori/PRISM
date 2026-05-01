@@ -25,7 +25,7 @@ Released with **GRIP: Ground Reaction Inertial Poser** (CVPR 2026), which fuses 
 
 ---
 
-## Download
+## 📥 Download
 
 Dataset access is gated by a short [**Google Form**](https://docs.google.com/forms/d/e/1FAIpQLSd32bDGpJy-a_PylvQmEZf_zVgwhpHU-O1Tfdv2pHLO3YOl0w/viewform). Submit the form and the download link will appear on the response screen.
 
@@ -37,7 +37,7 @@ unzip PRISM.zip -d data/
 
 ---
 
-## At a Glance
+## 📊 At a Glance
 
 | | |
 |---|---|
@@ -52,7 +52,7 @@ unzip PRISM.zip -d data/
 
 ---
 
-## Layout
+## 📁 Layout
 
 ```
 PRISM/
@@ -70,7 +70,7 @@ Each `.pkl` holds a full-length recording. The JSON files in `json/` define how 
 
 ---
 
-## File Format
+## 📄 File Format
 
 Each `.pkl` is a Python `dict`. `F` is the take's frame count (e.g. 13,160).
 
@@ -170,7 +170,7 @@ Slice the corresponding `.pkl` with `start_frame:end_frame`.
 
 ---
 
-## Quick Start
+## 🚀 Quick Start
 
 ```bash
 conda create -n prism python=3.11 -y && conda activate prism
