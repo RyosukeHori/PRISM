@@ -1,10 +1,6 @@
 # PRISM Dataset
 
-**PRISM** (*Pressure and Inertial Sensing for Human Motion and Interaction*) is a multimodal motion-capture dataset combining **SMPL body**, **8-IMU body sensors**, **insole pressure**, **SLAM head trajectory + environment point cloud**, and **scene objects**. It covers everyday locomotion, balance, sports, and stepping/sitting interactions in light and dark conditions.
-
-Released with **GRIP: Ground Reaction Inertial Poser** (CVPR 2026), which fuses 4 wrist/foot IMUs with insole pressure (GRF, CoP, contact) to reconstruct physically plausible full-body motion.
-
-<p align="center">
+<p align="left">
   <a href="https://ryosukehori.github.io/grip-project/">
     <img alt="Project Page" src="https://img.shields.io/badge/Project_Page-GRIP-1f7a8c?style=for-the-badge&logo=github&logoColor=white">
   </a>
@@ -12,6 +8,10 @@ Released with **GRIP: Ground Reaction Inertial Poser** (CVPR 2026), which fuses 
     <img alt="Request Access" src="https://img.shields.io/badge/Dataset-Request_Access-228b22?style=for-the-badge&logo=googleforms&logoColor=white">
   </a>
 </p>
+
+**PRISM** (*Pressure and Inertial Sensing for Human Motion and Interaction*) is a multimodal motion-capture dataset combining **SMPL body**, **8-IMU body sensors**, **insole pressure**, **SLAM head trajectory + environment point cloud**, and **scene objects**. It covers everyday locomotion, balance, sports, and stepping/sitting interactions in light and dark conditions.
+
+Released with **GRIP: Ground Reaction Inertial Poser** (CVPR 2026), which fuses 4 wrist/foot IMUs with insole pressure (GRF, CoP, contact) to reconstruct physically plausible full-body motion.
 
 <p align="center">
   <img src="image/PRISM.png" alt="PRISM teaser" width="720">
