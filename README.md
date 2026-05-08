@@ -8,12 +8,6 @@ Released with **GRIP: Ground Reaction Inertial Poser** (CVPR 2026), which fuses 
   <a href="https://ryosukehori.github.io/grip-project/">
     <img alt="Project Page" src="https://img.shields.io/badge/Project_Page-GRIP-1f7a8c?style=for-the-badge&logo=github&logoColor=white">
   </a>
-  <a href="https://arxiv.org/abs/2603.16233">
-    <img alt="arXiv" src="https://img.shields.io/badge/arXiv-2603.16233-b31b1b?style=for-the-badge&logo=arxiv&logoColor=white">
-  </a>
-  <a href="https://ryosukehori.github.io/grip-project/">
-    <img alt="CVPR 2026" src="https://img.shields.io/badge/CVPR-2026-1f4e79?style=for-the-badge">
-  </a>
   <a href="https://docs.google.com/forms/d/e/1FAIpQLSd32bDGpJy-a_PylvQmEZf_zVgwhpHU-O1Tfdv2pHLO3YOl0w/viewform">
     <img alt="Request Access" src="https://img.shields.io/badge/Dataset-Request_Access-228b22?style=for-the-badge&logo=googleforms&logoColor=white">
   </a>
